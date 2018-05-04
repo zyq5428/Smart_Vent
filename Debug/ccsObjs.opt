@@ -1,0 +1,1 @@
+"./gpio.obj" "./main.obj" "../lnk_msp430fr2033.cmd" -llibc.a 
