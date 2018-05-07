@@ -1,1 +1,1 @@
-"./cs.obj" "./gpio.obj" "./led.obj" "./main.obj" "./rtc.obj" "../lnk_msp430fr2033.cmd" -llibc.a 
+"./cs.obj" "./gpio.obj" "./led.obj" "./main.obj" "./rtc.obj" "./uart.obj" "../lnk_msp430fr2033.cmd" -llibc.a 

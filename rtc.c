@@ -26,6 +26,20 @@ void rtc_wake_isr(void)
     switch(wake_num) {
     case 0:
         led_off();
+        green_on();
+        wake_num++;
+        break;
+    case 1:
+        led_off();
+        wake_num = 0;
+        break;
+    default:
+        break;
+    }
+#if (0)
+    switch(wake_num) {
+    case 0:
+        led_off();
         red_on();
         wake_num++;
         break;
@@ -46,6 +60,7 @@ void rtc_wake_isr(void)
     default:
         break;
     }
+#endif
 }
 
 // RTC interrupt service routine
