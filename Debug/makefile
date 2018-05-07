@@ -10,6 +10,7 @@ GEN_OPTS__FLAG :=
 GEN_CMDS__FLAG := 
 
 ORDERED_OBJS += \
+"./cs.obj" \
 "./gpio.obj" \
 "./led.obj" \
 "./main.obj" \
@@ -156,8 +157,8 @@ Smart_Vent.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "gpio.obj" "led.obj" "main.obj" "rtc.obj" 
-	-$(RM) "gpio.d" "led.d" "main.d" "rtc.d" 
+	-$(RM) "cs.obj" "gpio.obj" "led.obj" "main.obj" "rtc.obj" 
+	-$(RM) "cs.d" "gpio.d" "led.d" "main.d" "rtc.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

@@ -69,12 +69,12 @@ void initGpio(void)
     /* P4 configuration */
         // Initialize XT1 32kHz crystal
     P4SEL0 |= BIT1 | BIT2;                  // set XT1 pin as second function
-    do
+/*    do
     {
         CSCTL7 &= ~(XT1OFFG | DCOFFG);      // Clear XT1 and DCO fault flag
         SFRIFG1 &= ~OFIFG;
     }while (SFRIFG1 & OFIFG);               // Test oscillator fault flag
-
+*/
     P4DIR |= (BIT0 | BIT3 | BIT4 | BIT5 | BIT6 | BIT7);
         /* P4.3 is Three-color light R pin,low on,height off */
         /* P4.4 is Three-color light B pin,low on,height off */

@@ -2,12 +2,15 @@
 #include "gpio.h"
 #include "rtc.h"
 #include "led.h"
+#include "cs.h"
 
 int main(void)
 {
     WDTCTL = WDTPW | WDTHOLD;               // Stop watchdog timer
 
     initGpio();
+
+    cs_init();
 
     rtc_init(60);
 
