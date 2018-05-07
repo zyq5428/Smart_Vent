@@ -6,6 +6,9 @@
  */
 
 #include <msp430.h>
+#include "led.h"
+
+int wake_num = 0;
 
 void rtc_init(int second)
 {
@@ -16,6 +19,33 @@ void rtc_init(int second)
     RTCMOD = (n * 32) - 1;
     // Source = 32kHz crystal, divided by 1024
     RTCCTL = RTCSS__XT1CLK | RTCSR | RTCPS__1024 | RTCIE;
+}
+
+void rtc_wake_isr(void)
+{
+    switch(wake_num) {
+    case 0:
+        led_off();
+        red_on();
+        wake_num++;
+        break;
+    case 1:
+        led_off();
+        green_on();
+        wake_num++;
+        break;
+    case 2:
+        led_off();
+        blue_on();
+        wake_num++;
+        break;
+    case 3:
+        led_off();
+        wake_num = 0;
+        break;
+    default:
+        break;
+    }
 }
 
 // RTC interrupt service routine
@@ -32,7 +62,7 @@ void __attribute__ ((interrupt(RTC_VECTOR))) RTC_ISR (void)
     {
         case  RTCIV_NONE:   break;          // No interrupt
         case  RTCIV_RTCIF:                  // RTC Overflow
-            P4OUT ^= BIT5;
+            rtc_wake_isr();
             break;
         default: break;
     }

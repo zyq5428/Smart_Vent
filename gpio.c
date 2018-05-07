@@ -77,8 +77,8 @@ void initGpio(void)
 
     P4DIR |= (BIT0 | BIT3 | BIT4 | BIT5 | BIT6 | BIT7);
         /* P4.3 is Three-color light R pin,low on,height off */
-        /* P4.4 is Three-color light R pin,low on,height off */
-        /* P4.5 is Three-color light R pin,low on,height off */
+        /* P4.4 is Three-color light B pin,low on,height off */
+        /* P4.5 is Three-color light G pin,low on,height off */
     P4OUT |= (BIT3 | BIT4 | BIT5);
         /* P4.0,6,7 is unused,because have External pull-up resistor, output height */
     P4OUT |= (BIT0 | BIT6 | BIT7);
