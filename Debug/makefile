@@ -12,6 +12,7 @@ GEN_CMDS__FLAG :=
 ORDERED_OBJS += \
 "./gpio.obj" \
 "./main.obj" \
+"./rtc.obj" \
 "../lnk_msp430fr2033.cmd" \
 $(GEN_CMDS__FLAG) \
 -llibc.a \
@@ -154,8 +155,8 @@ Smart_Vent.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "gpio.obj" "main.obj" 
-	-$(RM) "gpio.d" "main.d" 
+	-$(RM) "gpio.obj" "main.obj" "rtc.obj" 
+	-$(RM) "gpio.d" "main.d" "rtc.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 
