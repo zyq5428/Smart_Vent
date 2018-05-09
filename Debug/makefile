@@ -12,9 +12,12 @@ GEN_CMDS__FLAG :=
 ORDERED_OBJS += \
 "./cs.obj" \
 "./gpio.obj" \
+"./hp203b.obj" \
+"./i2c_hw.obj" \
 "./led.obj" \
 "./main.obj" \
 "./rtc.obj" \
+"./timer_delay.obj" \
 "./uart.obj" \
 "../lnk_msp430fr2033.cmd" \
 $(GEN_CMDS__FLAG) \
@@ -158,8 +161,8 @@ Smart_Vent.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "cs.obj" "gpio.obj" "led.obj" "main.obj" "rtc.obj" "uart.obj" 
-	-$(RM) "cs.d" "gpio.d" "led.d" "main.d" "rtc.d" "uart.d" 
+	-$(RM) "cs.obj" "gpio.obj" "hp203b.obj" "i2c_hw.obj" "led.obj" "main.obj" "rtc.obj" "timer_delay.obj" "uart.obj" 
+	-$(RM) "cs.d" "gpio.d" "hp203b.d" "i2c_hw.d" "led.d" "main.d" "rtc.d" "timer_delay.d" "uart.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

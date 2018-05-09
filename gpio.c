@@ -85,7 +85,7 @@ void initGpio(void)
 
     /* P5 configuration */
         /* P5.2 is UCB0SDA,P5.3 is UCB0SCL, connect HP203B */
-    P5SEL0 |= BIT2 | BIT3;                  // set P1.0,P1.1 pin as second function(UCA0UART)
+    P5SEL0 |= BIT2 | BIT3;                  // set P5.2,P5.3 pin as second function(UCB0I2C)
     P5DIR |= (BIT0 | BIT1 | BIT4 | BIT5 | BIT6 | BIT7);
         /* P5.0,1,4,5,6,7 is unused,because have External pull-up resistor, output height */
     P5OUT |= (BIT0 | BIT1 | BIT4 | BIT5 | BIT6 | BIT7);

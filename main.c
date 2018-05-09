@@ -4,6 +4,9 @@
 #include "led.h"
 #include "cs.h"
 #include "uart.h"
+#include "timer_delay.h"
+#include "i2c_hw.h"
+#include "hp203b.h"
 
 int main(void)
 {
@@ -17,5 +20,12 @@ int main(void)
 
     uart_init();
 
-    __bis_SR_register(LPM3_bits | GIE);     // Enter LPM3, enable interrupt
+
+    while (1) {
+        i2c_init();
+        hp203b_init();
+        P4OUT ^= BIT3;
+    }
+
+    //__bis_SR_register(LPM3_bits | GIE);     // Enter LPM3, enable interrupt
 }
