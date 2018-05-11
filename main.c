@@ -5,8 +5,7 @@
 #include "cs.h"
 #include "uart.h"
 #include "timer_delay.h"
-#include "i2c_hw.h"
-#include "hp203b.h"
+#include "bat_detect.h"
 
 int main(void)
 {
@@ -16,15 +15,14 @@ int main(void)
 
     cs_init();
 
-    rtc_init(60);
+    rtc_init(100);
 
     uart_init();
 
-
     while (1) {
-        i2c_init();
-        hp203b_init();
-        P4OUT ^= BIT3;
+        bat_info_init();
+        bat_detect();
+        delay_hw_s(3);
     }
 
     //__bis_SR_register(LPM3_bits | GIE);     // Enter LPM3, enable interrupt

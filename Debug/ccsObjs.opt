@@ -1,1 +1,1 @@
-"./cs.obj" "./gpio.obj" "./hp203b.obj" "./i2c_hw.obj" "./led.obj" "./main.obj" "./rtc.obj" "./timer_delay.obj" "./uart.obj" "../lnk_msp430fr2033.cmd" -llibc.a 
+"./bat_detect.obj" "./cs.obj" "./gpio.obj" "./hp203b.obj" "./i2c_hw.obj" "./led.obj" "./main.obj" "./rtc.obj" "./timer_delay.obj" "./uart.obj" "../lnk_msp430fr2033.cmd" -llibc.a 

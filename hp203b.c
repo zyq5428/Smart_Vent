@@ -123,5 +123,6 @@ void get_temp(void)
 void hp203b_init(void)
 {
     get_press_temp();
+    hp203b_off();
 }
 

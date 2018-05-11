@@ -10,6 +10,7 @@ GEN_OPTS__FLAG :=
 GEN_CMDS__FLAG := 
 
 ORDERED_OBJS += \
+"./bat_detect.obj" \
 "./cs.obj" \
 "./gpio.obj" \
 "./hp203b.obj" \
@@ -161,8 +162,8 @@ Smart_Vent.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "cs.obj" "gpio.obj" "hp203b.obj" "i2c_hw.obj" "led.obj" "main.obj" "rtc.obj" "timer_delay.obj" "uart.obj" 
-	-$(RM) "cs.d" "gpio.d" "hp203b.d" "i2c_hw.d" "led.d" "main.d" "rtc.d" "timer_delay.d" "uart.d" 
+	-$(RM) "bat_detect.obj" "cs.obj" "gpio.obj" "hp203b.obj" "i2c_hw.obj" "led.obj" "main.obj" "rtc.obj" "timer_delay.obj" "uart.obj" 
+	-$(RM) "bat_detect.d" "cs.d" "gpio.d" "hp203b.d" "i2c_hw.d" "led.d" "main.d" "rtc.d" "timer_delay.d" "uart.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

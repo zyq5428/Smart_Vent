@@ -9,6 +9,7 @@ CMD_SRCS += \
 ../lnk_msp430fr2033.cmd 
 
 C_SRCS += \
+../bat_detect.c \
 ../cs.c \
 ../gpio.c \
 ../hp203b.c \
@@ -20,6 +21,7 @@ C_SRCS += \
 ../uart.c 
 
 C_DEPS += \
+./bat_detect.d \
 ./cs.d \
 ./gpio.d \
 ./hp203b.d \
@@ -31,6 +33,7 @@ C_DEPS += \
 ./uart.d 
 
 OBJS += \
+./bat_detect.obj \
 ./cs.obj \
 ./gpio.obj \
 ./hp203b.obj \
@@ -42,6 +45,7 @@ OBJS += \
 ./uart.obj 
 
 OBJS__QUOTED += \
+"bat_detect.obj" \
 "cs.obj" \
 "gpio.obj" \
 "hp203b.obj" \
@@ -53,6 +57,7 @@ OBJS__QUOTED += \
 "uart.obj" 
 
 C_DEPS__QUOTED += \
+"bat_detect.d" \
 "cs.d" \
 "gpio.d" \
 "hp203b.d" \
@@ -64,6 +69,7 @@ C_DEPS__QUOTED += \
 "uart.d" 
 
 C_SRCS__QUOTED += \
+"../bat_detect.c" \
 "../cs.c" \
 "../gpio.c" \
 "../hp203b.c" \

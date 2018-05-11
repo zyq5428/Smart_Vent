@@ -58,12 +58,6 @@ void cs_init(void)
                                             // DCOCLK = MCLK and SMCLK source
     CSCTL5 |= DIVM_0 | DIVS_0;              // MCLK = DCOCLK = 8MHZ,
                                             // SMCLK = MCLK = 8MHz
-
-    P1DIR |= BIT0 + BIT4;                   // set MCLK and LED pin as output
-    P1SEL0 |= BIT4;                         // set MCLK pin as second function
-    P8DIR |= BIT0 | BIT1;                   // set ACLK and SMCLK pin as output
-    P8SEL0 |= BIT0 | BIT1;                  // set ACLK and SMCLK pin as second function
-
 }
 
 

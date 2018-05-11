@@ -7,6 +7,9 @@
 
 #include <msp430.h>
 #include "led.h"
+#include "i2c_hw.h"
+#include "hp203b.h"
+#include "bat_detect.h"
 
 int wake_num = 0;
 
@@ -27,11 +30,17 @@ void rtc_wake_isr(void)
     case 0:
         led_off();
         green_on();
+        //bat_detect();
+        i2c_init();
+        hp203b_init();
         wake_num++;
         break;
     case 1:
         led_off();
         wake_num = 0;
+        //bat_detect();
+        i2c_init();
+        hp203b_init();
         break;
     default:
         break;
@@ -77,7 +86,7 @@ void __attribute__ ((interrupt(RTC_VECTOR))) RTC_ISR (void)
     {
         case  RTCIV_NONE:   break;          // No interrupt
         case  RTCIV_RTCIF:                  // RTC Overflow
-            rtc_wake_isr();
+            //rtc_wake_isr();
             break;
         default: break;
     }
