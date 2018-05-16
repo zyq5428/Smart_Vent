@@ -6,6 +6,7 @@
 #include "uart.h"
 #include "timer_delay.h"
 #include "bat_detect.h"
+#include "angle.h"
 
 int main(void)
 {
@@ -20,9 +21,7 @@ int main(void)
     uart_init();
 
     while (1) {
-        bat_info_init();
-        bat_detect();
-        delay_hw_s(3);
+        angle_measure();
     }
 
     //__bis_SR_register(LPM3_bits | GIE);     // Enter LPM3, enable interrupt

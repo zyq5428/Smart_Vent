@@ -9,6 +9,8 @@ CMD_SRCS += \
 ../lnk_msp430fr2033.cmd 
 
 C_SRCS += \
+../adc10.c \
+../angle.c \
 ../bat_detect.c \
 ../cs.c \
 ../gpio.c \
@@ -21,6 +23,8 @@ C_SRCS += \
 ../uart.c 
 
 C_DEPS += \
+./adc10.d \
+./angle.d \
 ./bat_detect.d \
 ./cs.d \
 ./gpio.d \
@@ -33,6 +37,8 @@ C_DEPS += \
 ./uart.d 
 
 OBJS += \
+./adc10.obj \
+./angle.obj \
 ./bat_detect.obj \
 ./cs.obj \
 ./gpio.obj \
@@ -45,6 +51,8 @@ OBJS += \
 ./uart.obj 
 
 OBJS__QUOTED += \
+"adc10.obj" \
+"angle.obj" \
 "bat_detect.obj" \
 "cs.obj" \
 "gpio.obj" \
@@ -57,6 +65,8 @@ OBJS__QUOTED += \
 "uart.obj" 
 
 C_DEPS__QUOTED += \
+"adc10.d" \
+"angle.d" \
 "bat_detect.d" \
 "cs.d" \
 "gpio.d" \
@@ -69,6 +79,8 @@ C_DEPS__QUOTED += \
 "uart.d" 
 
 C_SRCS__QUOTED += \
+"../adc10.c" \
+"../angle.c" \
 "../bat_detect.c" \
 "../cs.c" \
 "../gpio.c" \
