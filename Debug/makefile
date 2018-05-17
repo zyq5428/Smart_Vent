@@ -19,6 +19,7 @@ ORDERED_OBJS += \
 "./i2c_hw.obj" \
 "./led.obj" \
 "./main.obj" \
+"./p2_int.obj" \
 "./rtc.obj" \
 "./timer_delay.obj" \
 "./uart.obj" \
@@ -164,8 +165,8 @@ Smart_Vent.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "adc10.obj" "angle.obj" "bat_detect.obj" "cs.obj" "gpio.obj" "hp203b.obj" "i2c_hw.obj" "led.obj" "main.obj" "rtc.obj" "timer_delay.obj" "uart.obj" 
-	-$(RM) "adc10.d" "angle.d" "bat_detect.d" "cs.d" "gpio.d" "hp203b.d" "i2c_hw.d" "led.d" "main.d" "rtc.d" "timer_delay.d" "uart.d" 
+	-$(RM) "adc10.obj" "angle.obj" "bat_detect.obj" "cs.obj" "gpio.obj" "hp203b.obj" "i2c_hw.obj" "led.obj" "main.obj" "p2_int.obj" "rtc.obj" "timer_delay.obj" "uart.obj" 
+	-$(RM) "adc10.d" "angle.d" "bat_detect.d" "cs.d" "gpio.d" "hp203b.d" "i2c_hw.d" "led.d" "main.d" "p2_int.d" "rtc.d" "timer_delay.d" "uart.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

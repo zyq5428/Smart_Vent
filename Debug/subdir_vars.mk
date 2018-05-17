@@ -18,6 +18,7 @@ C_SRCS += \
 ../i2c_hw.c \
 ../led.c \
 ../main.c \
+../p2_int.c \
 ../rtc.c \
 ../timer_delay.c \
 ../uart.c 
@@ -32,6 +33,7 @@ C_DEPS += \
 ./i2c_hw.d \
 ./led.d \
 ./main.d \
+./p2_int.d \
 ./rtc.d \
 ./timer_delay.d \
 ./uart.d 
@@ -46,6 +48,7 @@ OBJS += \
 ./i2c_hw.obj \
 ./led.obj \
 ./main.obj \
+./p2_int.obj \
 ./rtc.obj \
 ./timer_delay.obj \
 ./uart.obj 
@@ -60,6 +63,7 @@ OBJS__QUOTED += \
 "i2c_hw.obj" \
 "led.obj" \
 "main.obj" \
+"p2_int.obj" \
 "rtc.obj" \
 "timer_delay.obj" \
 "uart.obj" 
@@ -74,6 +78,7 @@ C_DEPS__QUOTED += \
 "i2c_hw.d" \
 "led.d" \
 "main.d" \
+"p2_int.d" \
 "rtc.d" \
 "timer_delay.d" \
 "uart.d" 
@@ -88,6 +93,7 @@ C_SRCS__QUOTED += \
 "../i2c_hw.c" \
 "../led.c" \
 "../main.c" \
+"../p2_int.c" \
 "../rtc.c" \
 "../timer_delay.c" \
 "../uart.c" 

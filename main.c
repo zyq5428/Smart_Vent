@@ -7,6 +7,7 @@
 #include "timer_delay.h"
 #include "bat_detect.h"
 #include "angle.h"
+#include "p2_int.h"
 
 int main(void)
 {
@@ -20,9 +21,11 @@ int main(void)
 
     uart_init();
 
-    while (1) {
+    p2_int_init();
+
+    while (0) {
         angle_measure();
     }
 
-    //__bis_SR_register(LPM3_bits | GIE);     // Enter LPM3, enable interrupt
+    __bis_SR_register(LPM3_bits | GIE);     // Enter LPM3, enable interrupt
 }
