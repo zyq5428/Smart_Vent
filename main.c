@@ -8,6 +8,7 @@
 #include "bat_detect.h"
 #include "angle.h"
 #include "p2_int.h"
+#include "motor.h"
 
 int main(void)
 {
@@ -27,5 +28,15 @@ int main(void)
         angle_measure();
     }
 
-    __bis_SR_register(LPM3_bits | GIE);     // Enter LPM3, enable interrupt
+    while (1) {
+        motor_init(motor_Forward, 10000, 80);
+        pwm_init();
+        motor_open();
+
+
+        __bis_SR_register(LPM0_bits);             // Enter LPM0
+        __no_operation();                         // For debugger
+    }
+
+    //__bis_SR_register(LPM3_bits | GIE);     // Enter LPM3, enable interrupt
 }
