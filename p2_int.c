@@ -56,7 +56,7 @@ void __attribute__ ((interrupt(PORT1_VECTOR))) Port_2 (void)
     case BIT5:      /* P2.5 is LIMIT2(Vent close), Falling edge*/
         P2IFG &= ~BIT5;
         motor_stop_operate();
-        if (vent.init_flag == ERROR) {
+        if (vent.limit_close_flag == ERROR) {
             angle.value_close = read_angle_value();
             vent.limit_close_flag = OK;
         }

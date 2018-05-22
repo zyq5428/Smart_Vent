@@ -41,6 +41,7 @@ unsigned char adc_repeat_single_channel_1v5(unsigned int adc_ch, unsigned char n
 
 unsigned char adc_repeat_single_channel_vcc(unsigned int adc_ch, unsigned char num, unsigned int *Result)
 {
+    unsigned char i;
     ADC_Count = num;
     ADC_Result = Result;
 
@@ -49,7 +50,7 @@ unsigned char adc_repeat_single_channel_vcc(unsigned int adc_ch, unsigned char n
     ADCCTL1 |= ADCSHP | ADCCONSEQ_2;                                  // ADCCLK = MODOSC; sampling timer, Repeat-single-channel
     ADCCTL2 |= ADCRES;                                       // 10-bit conversion results
     ADCMCTL0 |= adc_ch | ADCSREF_0;                       // A5 ADC input select; Vref=1.5V
-    ADCIE |= ADCIE0;                                         // Enable ADC conv complete interrupt
+    //ADCIE |= ADCIE0;                                         // Enable ADC conv complete interrupt
 
     // Configure reference module located in the PMM
     PMMCTL0_H = PMMPW_H;                    // Unlock the PMM registers
@@ -57,7 +58,16 @@ unsigned char adc_repeat_single_channel_vcc(unsigned int adc_ch, unsigned char n
     while(!(PMMCTL2 & REFGENRDY));          // Poll till internal reference settles
 
     ADCCTL0 |= ADCENC | ADCSC;                           // Sampling and conversion start
-    __bis_SR_register(LPM0_bits | GIE);                  // LPM0, ADC_ISR will force exit
+    //__bis_SR_register(LPM0_bits | GIE);                  // LPM0, ADC_ISR will force exit
+    for (i = 0; i < num; i ++) {
+        while (ADCIFG & ADCIV_ADCIFG)
+            ;
+        *ADC_Result++ = ADCMEM0;
+    }
+
+    ADCCTL0 &= ~ADCENC;
+    ADCIE = 0x0;                                         // Disable ADC conv complete interrupt
+    ADCIFG = 0x0;                                         // Clear ADC Interrupt Flag Register
 
     return ADC_Count;
 }

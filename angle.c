@@ -49,6 +49,7 @@ void angle_measure(void)
     angle.value_current = adc_window_comparator_vcc(ADCINCH_9, angle.High_Threshold, angle.Low_Threshold);
 }
 
+#if (0)
 void Angle_correction(void)
 {
     unsigned int temp;
@@ -69,6 +70,21 @@ void Angle_correction(void)
         angle.value_90 = angle.value_open + (angle.one_degree_adc * 3);
     }
 }
+#endif
+
+#if (1)
+void Angle_correction(void)
+{
+    unsigned int temp;
+
+    temp = angle.value_close - angle.value_open;
+    angle.one_degree_adc = temp / 90;
+    angle.value_0 = angle.value_close - (angle.one_degree_adc * 3);
+    angle.value_30 = angle.value_close - (angle.one_degree_adc * 30);
+    angle.value_60 = angle.value_close - (angle.one_degree_adc * 60);
+    angle.value_90 = angle.value_open + (angle.one_degree_adc * 3);
+}
+#endif
 
 unsigned int read_angle_value(void)
 {

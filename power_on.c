@@ -50,9 +50,15 @@ void vent_self_test(void)
     __bis_SR_register(GIE);     // Enter LPM0
     while (vent.limit_close_flag == ERROR) {
         limit_error();
-        __bis_SR_register(LPM0_bits | GIE);     // Enter LPM0
     }
 
+    if (vent.limit_open_flag == ERROR) {
+        vent_open();
+        __bis_SR_register(GIE);     // Enter LPM0
+        while (vent.limit_open_flag == ERROR) {
+            limit_error();
+        }
+    }
 
     vent.init_flag = OK;
 
