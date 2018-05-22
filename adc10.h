@@ -12,6 +12,8 @@
 
 unsigned char adc_repeat_single_channel_1v5(unsigned int adc_ch, unsigned char num, unsigned int *Result);
 
+unsigned char adc_repeat_single_channel_vcc(unsigned int adc_ch, unsigned char num, unsigned int *Result);
+
 unsigned int adc_window_comparator_vcc(unsigned int adc_ch, unsigned int High_Threshold, unsigned int Low_Threshold);
 
 

@@ -39,6 +39,29 @@ unsigned char adc_repeat_single_channel_1v5(unsigned int adc_ch, unsigned char n
     return ADC_Count;
 }
 
+unsigned char adc_repeat_single_channel_vcc(unsigned int adc_ch, unsigned char num, unsigned int *Result)
+{
+    ADC_Count = num;
+    ADC_Result = Result;
+
+    // Configure ADC10
+    ADCCTL0 |= ADCSHT_2 | ADCMSC | ADCON;                             // ADCON, S&H=16 ADC clks
+    ADCCTL1 |= ADCSHP | ADCCONSEQ_2;                                  // ADCCLK = MODOSC; sampling timer, Repeat-single-channel
+    ADCCTL2 |= ADCRES;                                       // 10-bit conversion results
+    ADCMCTL0 |= adc_ch | ADCSREF_0;                       // A5 ADC input select; Vref=1.5V
+    ADCIE |= ADCIE0;                                         // Enable ADC conv complete interrupt
+
+    // Configure reference module located in the PMM
+    PMMCTL0_H = PMMPW_H;                    // Unlock the PMM registers
+    PMMCTL2 |= INTREFEN;                    // Enable internal reference
+    while(!(PMMCTL2 & REFGENRDY));          // Poll till internal reference settles
+
+    ADCCTL0 |= ADCENC | ADCSC;                           // Sampling and conversion start
+    __bis_SR_register(LPM0_bits | GIE);                  // LPM0, ADC_ISR will force exit
+
+    return ADC_Count;
+}
+
 unsigned int adc_window_comparator_vcc(unsigned int adc_ch, unsigned int High_Threshold, unsigned int Low_Threshold)
 {
     // Configure ADC;

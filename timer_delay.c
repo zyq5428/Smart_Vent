@@ -5,6 +5,26 @@
  *      Author: johnsonzhou
  */
 #include <msp430.h>
+#include "power_on.h"
+
+extern struct vent_info vent;
+
+void timer_start(void)
+{
+    TA1CCR0 = 0xffff-1;                             // Time is 1ms
+    TA1CTL = TASSEL__ACLK | MC__UP | TACLR;  // ACLK, upmode, clear TAR, enable interrupt
+}
+
+void timer_end(void)
+{
+    unsigned int temp = 0;
+    temp = TA1R;                             // Time is temp / 0x21 (ms)
+    temp = temp / 0x21;
+    if (temp == 0)
+        temp = 1;
+    vent.MAX_Time = temp;
+    TA1CTL = TASSEL__ACLK | MC_0 | TACLR | TAIE;
+}
 
 void delay_hw_ms(int delay_ms)
 {

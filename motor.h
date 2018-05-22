@@ -15,6 +15,9 @@
 #define motor_Reverse 2
 #define motor_aberrant 3
 
+#define open_flag motor_Reverse
+#define close_flag motor_Forward
+
 struct motor_info {
     unsigned char motor_flag;
     unsigned int motor_freq;
@@ -30,6 +33,8 @@ void motor_init(unsigned char flag, unsigned int freq, unsigned int duty);
 void pwm_init(void);
 void motor_stop_operate(void);
 void motor_open(void);
+void vent_open(void);
+void vent_close(void);
 
 
 #endif /* MOTOR_H_ */

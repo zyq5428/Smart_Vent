@@ -20,6 +20,7 @@ C_SRCS += \
 ../main.c \
 ../motor.c \
 ../p2_int.c \
+../power_on.c \
 ../rtc.c \
 ../timer_delay.c \
 ../uart.c 
@@ -36,6 +37,7 @@ C_DEPS += \
 ./main.d \
 ./motor.d \
 ./p2_int.d \
+./power_on.d \
 ./rtc.d \
 ./timer_delay.d \
 ./uart.d 
@@ -52,6 +54,7 @@ OBJS += \
 ./main.obj \
 ./motor.obj \
 ./p2_int.obj \
+./power_on.obj \
 ./rtc.obj \
 ./timer_delay.obj \
 ./uart.obj 
@@ -68,6 +71,7 @@ OBJS__QUOTED += \
 "main.obj" \
 "motor.obj" \
 "p2_int.obj" \
+"power_on.obj" \
 "rtc.obj" \
 "timer_delay.obj" \
 "uart.obj" 
@@ -84,6 +88,7 @@ C_DEPS__QUOTED += \
 "main.d" \
 "motor.d" \
 "p2_int.d" \
+"power_on.d" \
 "rtc.d" \
 "timer_delay.d" \
 "uart.d" 
@@ -100,6 +105,7 @@ C_SRCS__QUOTED += \
 "../main.c" \
 "../motor.c" \
 "../p2_int.c" \
+"../power_on.c" \
 "../rtc.c" \
 "../timer_delay.c" \
 "../uart.c" 

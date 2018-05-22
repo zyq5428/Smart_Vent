@@ -55,8 +55,8 @@ static void motor_Reverse_start(void)
     P1OUT &= ~BIT7;                    //output low value
 
     TA0CCR0 = pwm.period_value - 1;                         // PWM Period
-    TA0CCTL1 = OUTMOD_7;                      // CCR1 reset/set
-    TA0CCR1 = pwm.high_value;                            // CCR1 PWM duty cycle
+    TA0CCTL2 = OUTMOD_7;                      // CCR1 reset/set
+    TA0CCR2 = pwm.high_value;                            // CCR1 PWM duty cycle
     TA0CTL = TASSEL__SMCLK | MC__UP | TACLR;  // SMCLK, up mode, clear TAR
 }
 
@@ -87,3 +87,17 @@ void motor_open(void)
         break;
     }
 }
+
+void vent_open(void)
+{
+    motor.motor_flag = open_flag;
+    motor_open();
+}
+
+void vent_close(void)
+{
+    motor.motor_flag = close_flag;
+    motor_open();
+}
+
+

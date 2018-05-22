@@ -7,6 +7,12 @@
 
 #include "p2_int.h"
 #include "led.h"
+#include "motor.h"
+#include "power_on.h"
+#include "angle.h"
+
+extern struct angle_info angle;
+extern struct vent_info vent;
 
 void p2_int_init(void)
 {
@@ -37,15 +43,25 @@ void __attribute__ ((interrupt(PORT1_VECTOR))) Port_2 (void)
     case BIT3:
         P2IFG &= ~BIT3;
         break;
-    case BIT4:
+    case BIT4:      /* P2.4 is LIMIT1 (Vent open), Falling edge*/
         P2IFG &= ~BIT4;
+        motor_stop_operate();
+        if (vent.limit_open_flag == ERROR) {
+            angle.value_open = read_angle_value();
+            vent.limit_open_flag = OK;
+        }
         led_off();
         green_on();
         break;
-    case BIT5:
+    case BIT5:      /* P2.5 is LIMIT2(Vent close), Falling edge*/
         P2IFG &= ~BIT5;
+        motor_stop_operate();
+        if (vent.init_flag == ERROR) {
+            angle.value_close = read_angle_value();
+            vent.limit_close_flag = OK;
+        }
         led_off();
-        red_on();
+        blue_on();
         break;
     case BIT6:
         P2IFG &= ~BIT6;

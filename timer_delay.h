@@ -12,6 +12,8 @@ void delay_hw_ms(int delay_ms);
 
 void delay_hw_s(int delay_s);
 
+void timer_start(void);
 
+void timer_end(void);
 
 #endif /* TIMER_DELAY_H_ */

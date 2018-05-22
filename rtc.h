@@ -10,6 +10,6 @@
 
 void rtc_init(int second);
 
-
+void rtc_wake_isr(void);
 
 #endif /* RTC_H_ */

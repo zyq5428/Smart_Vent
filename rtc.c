@@ -30,7 +30,7 @@ void rtc_wake_isr(void)
     case 0:
         led_off();
         green_on();
-        //bat_detect();
+        bat_detect();
         i2c_init();
         hp203b_init();
         wake_num++;
@@ -38,38 +38,13 @@ void rtc_wake_isr(void)
     case 1:
         led_off();
         wake_num = 0;
-        //bat_detect();
+        bat_detect();
         i2c_init();
         hp203b_init();
         break;
     default:
         break;
     }
-#if (0)
-    switch(wake_num) {
-    case 0:
-        led_off();
-        red_on();
-        wake_num++;
-        break;
-    case 1:
-        led_off();
-        green_on();
-        wake_num++;
-        break;
-    case 2:
-        led_off();
-        blue_on();
-        wake_num++;
-        break;
-    case 3:
-        led_off();
-        wake_num = 0;
-        break;
-    default:
-        break;
-    }
-#endif
 }
 
 // RTC interrupt service routine

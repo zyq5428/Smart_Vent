@@ -9,6 +9,7 @@
 #include "angle.h"
 #include "p2_int.h"
 #include "motor.h"
+#include "power_on.h"
 
 int main(void)
 {
@@ -18,25 +19,15 @@ int main(void)
 
     cs_init();
 
-    rtc_init(100);
-
-    uart_init();
+    //uart_init();
 
     p2_int_init();
 
-    while (0) {
-        angle_measure();
-    }
+    vent_self_test();
 
-    while (1) {
-        motor_init(motor_Forward, 10000, 80);
-        pwm_init();
-        motor_open();
+    rtc_wake_isr();
 
+    rtc_init(60);
 
-        __bis_SR_register(LPM0_bits);             // Enter LPM0
-        __no_operation();                         // For debugger
-    }
-
-    //__bis_SR_register(LPM3_bits | GIE);     // Enter LPM3, enable interrupt
+    __bis_SR_register(LPM3_bits | GIE);     // Enter LPM3, enable interrupt
 }
