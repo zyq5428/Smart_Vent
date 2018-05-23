@@ -57,6 +57,9 @@ unsigned char adc_repeat_single_channel_vcc(unsigned int adc_ch, unsigned char n
     PMMCTL2 |= INTREFEN;                    // Enable internal reference
     while(!(PMMCTL2 & REFGENRDY));          // Poll till internal reference settles
 
+    ADCIFG = 0x0;
+    ADCMEM0 = 0x0;
+
     ADCCTL0 |= ADCENC | ADCSC;                           // Sampling and conversion start
     //__bis_SR_register(LPM0_bits | GIE);                  // LPM0, ADC_ISR will force exit
     for (i = 0; i < num; i ++) {

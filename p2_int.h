@@ -12,5 +12,12 @@
 
 void p2_int_init(void);
 
+void open_int_en(void);
+
+void open_int_off(void);
+
+void close_int_en(void);
+
+void close_int_off(void);
 
 #endif /* P2_INT_H_ */

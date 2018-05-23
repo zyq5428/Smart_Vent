@@ -19,7 +19,7 @@ struct angle_info {
     unsigned int value_60;
     unsigned int value_90;
     unsigned int value_deviation;
-    unsigned int one_degree_adc;
+    float one_degree_adc;
     unsigned int High_Threshold;
     unsigned int Low_Threshold;
 };

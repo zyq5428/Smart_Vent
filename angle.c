@@ -78,11 +78,11 @@ void Angle_correction(void)
     unsigned int temp;
 
     temp = angle.value_close - angle.value_open;
-    angle.one_degree_adc = temp / 90;
-    angle.value_0 = angle.value_close - (angle.one_degree_adc * 3);
-    angle.value_30 = angle.value_close - (angle.one_degree_adc * 30);
-    angle.value_60 = angle.value_close - (angle.one_degree_adc * 60);
-    angle.value_90 = angle.value_open + (angle.one_degree_adc * 3);
+    angle.one_degree_adc = (float)temp / 90;
+    angle.value_0 = angle.value_close - (unsigned int)(angle.one_degree_adc * 3);
+    angle.value_30 = angle.value_close - (unsigned int)(angle.one_degree_adc * 30);
+    angle.value_60 = angle.value_close - (unsigned int)(angle.one_degree_adc * 60);
+    angle.value_90 = angle.value_open + (unsigned int)(angle.one_degree_adc * 3);
 }
 #endif
 
@@ -99,10 +99,10 @@ unsigned int read_angle_value(void)
 
     adc_repeat_single_channel_vcc(ADCINCH_9, 10, angle_value);
 
-    for (i = 0; i < num; i++) {
+    for (i = 1; i < num; i++) {
         angle_temp = angle_temp + angle_value[i];
     }
-    angle_temp = angle_temp / num;
+    angle_temp = angle_temp / (num - 1);
 
     return angle_temp;
 }
