@@ -23,6 +23,8 @@ int main(void)
 
     p2_int_init();
 
+    bat_info_init();
+
     vent_self_test();
 
     rtc_wake_isr();

@@ -13,6 +13,7 @@
 
 extern struct angle_info angle;
 extern struct vent_info vent;
+extern struct motor_info motor;
 
 void p2_int_init(void)
 {
@@ -69,8 +70,10 @@ void __attribute__ ((interrupt(PORT1_VECTOR))) Port_2 (void)
         break;
     case BIT4:      /* P2.4 is LIMIT1 (Vent open), Falling edge*/
         P2IFG &= ~BIT4;
+        __delay_cycles(10000);             // Delay for n*(1/MCLK(8000000)=0.1s
         if (!(P2IN & BIT4)) {
             motor_stop_operate();
+            motor.stop_flag = open_limit_stop;
             if (vent.limit_open_flag == ERROR) {
                 angle.value_open = read_angle_value();
                 vent.limit_open_flag = OK;
@@ -82,8 +85,10 @@ void __attribute__ ((interrupt(PORT1_VECTOR))) Port_2 (void)
 
     case BIT5:      /* P2.5 is LIMIT2(Vent close), Falling edge*/
         P2IFG &= ~BIT5;
+        __delay_cycles(10000);             // Delay for n*(1/MCLK(8000000)=0.1s
         if (!(P2IN & BIT5)) {
             motor_stop_operate();
+            motor.stop_flag = close_limit_stop;
             if (vent.limit_close_flag == ERROR) {
                 angle.value_close = read_angle_value();
                 vent.limit_close_flag = OK;

@@ -15,6 +15,10 @@ void motor_init(unsigned char flag, unsigned int freq, unsigned int duty)
     motor.motor_flag = flag;
     motor.motor_freq = freq;   //Motor control PWM wave frequency is 10000Hz
     motor.motor_duty = duty;      //Motor control PWM wave duty is 80%
+
+    motor.stop_flag = default_value;
+    motor.Forward_counter = 0;
+    motor.Reverse_counter = 0;
 }
 
 void pwm_init(void)
@@ -44,6 +48,8 @@ static void motor_Forward_start(void)
     TA0CCTL1 = OUTMOD_7;                      // CCR1 reset/set
     TA0CCR1 = pwm.high_value;                            // CCR1 PWM duty cycle
     TA0CTL = TASSEL__SMCLK | MC__UP | TACLR;  // SMCLK, up mode, clear TAR
+
+    motor.Forward_counter++;
 }
 
 /*P1.6 is TA0.2, P1.7 is low*/
@@ -58,6 +64,8 @@ static void motor_Reverse_start(void)
     TA0CCTL2 = OUTMOD_7;                      // CCR1 reset/set
     TA0CCR2 = pwm.high_value;                            // CCR1 PWM duty cycle
     TA0CTL = TASSEL__SMCLK | MC__UP | TACLR;  // SMCLK, up mode, clear TAR
+
+    motor.Reverse_counter++;
 }
 
 static void motor_aberrant_isr(void)

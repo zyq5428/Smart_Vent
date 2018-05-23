@@ -15,6 +15,11 @@
 #define motor_Reverse 2
 #define motor_aberrant 3
 
+#define default_value 0
+#define open_limit_stop 1
+#define close_limit_stop 2
+#define angle_match_stop 3
+
 #define open_flag motor_Reverse
 #define close_flag motor_Forward
 
@@ -22,6 +27,9 @@ struct motor_info {
     unsigned char motor_flag;
     unsigned int motor_freq;
     unsigned int motor_duty;
+    unsigned char stop_flag;
+    unsigned int Forward_counter;
+    unsigned int Reverse_counter;
 };
 
 struct pwm_info {

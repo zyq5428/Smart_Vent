@@ -33,7 +33,7 @@ void vent_self_test(void)
 
     angle_en();
 
-    //timer_start();
+    timer_start();
 
     motor_init(motor_stop, 10000, 80);
     pwm_init();
@@ -62,7 +62,9 @@ void vent_self_test(void)
 
     vent.init_flag = OK;
 
+    timer_end();
+
     Angle_correction();
 
-    //angle_off();
+    angle_off();
 }
