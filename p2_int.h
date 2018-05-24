@@ -20,4 +20,8 @@ void close_int_en(void);
 
 void close_int_off(void);
 
+void limit_int_en(void);
+
+void limit_int_off(void);
+
 #endif /* P2_INT_H_ */

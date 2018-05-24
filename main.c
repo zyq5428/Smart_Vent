@@ -21,7 +21,7 @@ int main(void)
 
     //uart_init();
 
-    p2_int_init();
+    limit_int_en();
 
     bat_info_init();
 
@@ -29,7 +29,13 @@ int main(void)
 
     rtc_wake_isr();
 
+    while (1) {
+        angle_test();
+    }
+
     rtc_init(60);
 
-    __bis_SR_register(LPM3_bits | GIE);     // Enter LPM3, enable interrupt
+    while (0) {
+        __bis_SR_register(LPM3_bits | GIE);     // Enter LPM3, enable interrupt
+    }
 }

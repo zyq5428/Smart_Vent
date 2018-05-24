@@ -61,7 +61,7 @@ void __attribute__ ((interrupt(RTC_VECTOR))) RTC_ISR (void)
     {
         case  RTCIV_NONE:   break;          // No interrupt
         case  RTCIV_RTCIF:                  // RTC Overflow
-            //rtc_wake_isr();
+            rtc_wake_isr();
             break;
         default: break;
     }

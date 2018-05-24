@@ -7,12 +7,17 @@
 
 #include "adc10.h"
 #include "led.h"
+#include "motor.h"
 
 unsigned int *ADC_Result;
 unsigned char ADC_Count;
 
+extern struct motor_info motor;
+
 void adc_window_isr(void)
 {
+    motor_stop_operate();
+    motor.stop_flag = angle_match_stop;
 
 }
 
@@ -84,11 +89,11 @@ unsigned int adc_window_comparator_vcc(unsigned int adc_ch, unsigned int High_Th
     ADCMCTL0 = adc_ch | ADCSREF_0;                   // Vref AVCC, A9
     ADCHI = High_Threshold;                             // Window Comparator Hi-threshold
     ADCLO = Low_Threshold;                              // Window Comparator Lo-threshold
-    ADCIE |= ADCHIIE | ADCLOIE | ADCINIE;               // Enable ADC conv complete interrupt
-    //ADCIE |= ADCINIE;               // Enable ADC conv complete interrupt
+    //ADCIE |= ADCHIIE | ADCLOIE | ADCINIE;               // Enable ADC conv complete interrupt
+    ADCIE |= ADCINIE;               // Enable ADC conv complete interrupt
 
     ADCCTL0 |= ADCENC | ADCSC;                           // Sampling and conversion start
-    __bis_SR_register(LPM0_bits | GIE);                  // LPM0, ADC_ISR will force exit
+    //__bis_SR_register(LPM0_bits | GIE);                  // LPM0, ADC_ISR will force exit
 
     return *ADC_Result;
 
@@ -129,8 +134,8 @@ void __attribute__ ((interrupt(ADC_VECTOR))) ADC_ISR (void)
             adc_window_isr();
             P4OUT |= BIT3 | BIT4 |BIT5;
             P4OUT &= ~BIT5;
-            //ADCCTL0 &= ~ADCENC;
-            //__bic_SR_register_on_exit(LPM0_bits);            // Clear CPUOFF bit from LPM0
+            ADCCTL0 &= ~ADCENC;
+            __bic_SR_register_on_exit(LPM0_bits);            // Clear CPUOFF bit from LPM0
             break;
         case ADCIV_ADCIFG:
             if (ADC_Count > 1) {

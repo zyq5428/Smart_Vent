@@ -29,6 +29,8 @@ void limit_error(void)
 
 void vent_self_test(void)
 {
+    __bis_SR_register(GIE);     // General interrupt enable
+
     vent_info_init();
 
     angle_en();
@@ -40,21 +42,18 @@ void vent_self_test(void)
 
     if (!((P2IN & BIT4) == 0)) {
         vent_open();
-        __bis_SR_register(GIE);     // Enter LPM0
         while (vent.limit_open_flag == ERROR) {
             limit_error();
         }
     }
 
     vent_close();
-    __bis_SR_register(GIE);     // Enter LPM0
     while (vent.limit_close_flag == ERROR) {
         limit_error();
     }
 
     if (vent.limit_open_flag == ERROR) {
         vent_open();
-        __bis_SR_register(GIE);     // Enter LPM0
         while (vent.limit_open_flag == ERROR) {
             limit_error();
         }

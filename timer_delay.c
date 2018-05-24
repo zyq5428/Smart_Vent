@@ -4,7 +4,7 @@
  *  Created on: 2018Äê5ÔÂ8ÈÕ
  *      Author: johnsonzhou
  */
-#include <msp430.h>
+#include "timer_delay.h"
 #include "power_on.h"
 
 extern struct vent_info vent;
@@ -26,20 +26,20 @@ void timer_end(void)
     TA1CTL = TASSEL__ACLK | MC_0 | TACLR | TAIE;
 }
 
-void delay_hw_ms(int delay_ms)
+void delay_hw_ms(unsigned int delay_ms)
 {
-    int n;
-    for (n=delay_ms; n > 0; n--) {
+    unsigned int n;
+    for (n = delay_ms; n > 0; n--) {
         TA1CCR0 = 0x21;                             // Time is 1ms
         TA1CTL = TASSEL__ACLK | MC__UP | TACLR | TAIE;  // ACLK, upmode, clear TAR, enable interrupt
           __bis_SR_register(LPM3_bits | GIE);       // Enter LPM3, enable interrupts
     }
 }
 
-void delay_hw_s(int delay_s)
+void delay_hw_s(unsigned int delay_s)
 {
-    int n;
-    for (n=delay_s; n > 0; n--) {
+    unsigned int n;
+    for (n = delay_s; n > 0; n--) {
         TA1CCR0 = 0x7FFF;                               // Time is 1s
         TA1CTL = TASSEL__ACLK | MC__UP | TACLR | TAIE;  // ACLK, upmode, clear TAR, enable interrupt
           __bis_SR_register(LPM3_bits | GIE);       // Enter LPM3, enable interrupts

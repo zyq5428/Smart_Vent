@@ -6,6 +6,7 @@
  */
 
 #include "motor.h"
+#include "p2_int.h"
 
 struct motor_info motor;
 struct pwm_info pwm;
@@ -29,6 +30,8 @@ void pwm_init(void)
 
 void motor_stop_operate(void)
 {
+    //limit_int_off();
+
     P3OUT &= ~(BIT1 | BIT7);                   // off sensor power
     TA0CTL = MC__STOP | TACLR;  // stop and  TAR
     P1DIR |= BIT6 | BIT7;                     // P1.6 and P1.7 output
@@ -98,12 +101,18 @@ void motor_open(void)
 
 void vent_open(void)
 {
+    //close_int_off();
+    //open_int_en();
+
     motor.motor_flag = open_flag;
     motor_open();
 }
 
 void vent_close(void)
 {
+    //open_int_off();
+    //close_int_en();
+
     motor.motor_flag = close_flag;
     motor_open();
 }

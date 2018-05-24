@@ -19,6 +19,7 @@
 #define open_limit_stop 1
 #define close_limit_stop 2
 #define angle_match_stop 3
+#define time_out_stop 4
 
 #define open_flag motor_Reverse
 #define close_flag motor_Forward

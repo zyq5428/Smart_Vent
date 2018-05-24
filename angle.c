@@ -8,8 +8,12 @@
 #include "angle.h"
 #include "adc10.h"
 #include "led.h"
+#include "motor.h"
+#include "timer_delay.h"
 
 struct angle_info angle;
+extern struct motor_info motor;
+extern struct vent_info vent;
 
 #define angle_num 10
 unsigned int angle_value[angle_num];
@@ -105,4 +109,47 @@ unsigned int read_angle_value(void)
     angle_temp = angle_temp / (num - 1);
 
     return angle_temp;
+}
+
+unsigned int vent_operate(unsigned int angle_value)
+{
+    angle.High_Threshold = angle_value + (unsigned int)(angle.value_deviation * angle.one_degree_adc);
+    angle.Low_Threshold = angle_value - (unsigned int)(angle.value_deviation * angle.one_degree_adc);
+
+    if (angle.value_current < angle.Low_Threshold) {
+        motor.stop_flag = default_value;
+        adc_window_comparator_vcc(ADCINCH_9, angle.High_Threshold, angle.Low_Threshold);
+        vent_close();
+        delay_hw_ms(800);
+        if (motor.stop_flag != default_value) {
+            motor_stop_operate();
+            motor.stop_flag = time_out_stop;
+        }
+    } else if((angle.value_current < angle.High_Threshold) && (angle.value_current > angle.Low_Threshold)) {
+        return angle.value_current;
+    } else if (angle.value_current > angle.High_Threshold) {
+        motor.stop_flag = default_value;
+        adc_window_comparator_vcc(ADCINCH_9, angle.High_Threshold, angle.Low_Threshold);
+        vent_open();
+        delay_hw_ms(800);
+        if (motor.stop_flag != default_value) {
+            motor_stop_operate();
+            motor.stop_flag = time_out_stop;
+        }
+    }
+
+    angle.value_current = read_angle_value();
+    return angle.value_current;
+}
+
+void angle_test(void)
+{
+    //delay_hw_s(30);
+    vent_operate(angle.value_30);
+    //delay_hw_s(30);
+    vent_operate(angle.value_60);
+    //delay_hw_s(30);
+    vent_operate(angle.value_90);
+    //delay_hw_s(30);
+    vent_operate(angle.value_0);
 }

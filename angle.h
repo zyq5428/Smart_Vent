@@ -29,5 +29,7 @@ void angle_off(void);
 void angle_measure(void);
 void Angle_correction(void);
 unsigned int read_angle_value(void);
+unsigned int vent_operate(unsigned int angle_value);
+void angle_test(void);
 
 #endif /* ANGLE_H_ */
