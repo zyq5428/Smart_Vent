@@ -8,11 +8,13 @@
 #include "adc10.h"
 #include "led.h"
 #include "motor.h"
+#include "angle.h"
 
 unsigned int *ADC_Result;
 unsigned char ADC_Count;
 
 extern struct motor_info motor;
+extern struct angle_info angle;
 
 void adc_window_isr(void)
 {
@@ -27,11 +29,11 @@ unsigned char adc_repeat_single_channel_1v5(unsigned int adc_ch, unsigned char n
     ADC_Result = Result;
 
     // Configure ADC10
-    ADCCTL0 |= ADCSHT_2 | ADCMSC | ADCON;                             // ADCON, S&H=16 ADC clks
-    ADCCTL1 |= ADCSHP | ADCCONSEQ_2;                                  // ADCCLK = MODOSC; sampling timer, Repeat-single-channel
-    ADCCTL2 |= ADCRES;                                       // 10-bit conversion results
-    ADCMCTL0 |= adc_ch | ADCSREF_1;                       // A5 ADC input select; Vref=1.5V
-    ADCIE |= ADCIE0;                                         // Enable ADC conv complete interrupt
+    ADCCTL0 = ADCSHT_2 | ADCMSC | ADCON;                             // ADCON, S&H=16 ADC clks
+    ADCCTL1 = ADCSHP | ADCCONSEQ_2;                                  // ADCCLK = MODOSC; sampling timer, Repeat-single-channel
+    ADCCTL2 = ADCRES;                                       // 10-bit conversion results
+    ADCMCTL0 = adc_ch | ADCSREF_1;                       // A5 ADC input select; Vref=1.5V
+    ADCIE = ADCIE0;                                         // Enable ADC conv complete interrupt
 
     // Configure reference module located in the PMM
     PMMCTL0_H = PMMPW_H;                    // Unlock the PMM registers
@@ -39,7 +41,7 @@ unsigned char adc_repeat_single_channel_1v5(unsigned int adc_ch, unsigned char n
     while(!(PMMCTL2 & REFGENRDY));          // Poll till internal reference settles
 
     ADCCTL0 |= ADCENC | ADCSC;                           // Sampling and conversion start
-    __bis_SR_register(LPM0_bits | GIE);                  // LPM0, ADC_ISR will force exit
+    __bis_SR_register(LPM0_bits);                  // LPM0, ADC_ISR will force exit
 
     return ADC_Count;
 }
@@ -51,29 +53,28 @@ unsigned char adc_repeat_single_channel_vcc(unsigned int adc_ch, unsigned char n
     ADC_Result = Result;
 
     // Configure ADC10
-    ADCCTL0 |= ADCSHT_2 | ADCMSC | ADCON;                             // ADCON, S&H=16 ADC clks
-    ADCCTL1 |= ADCSHP | ADCCONSEQ_2;                                  // ADCCLK = MODOSC; sampling timer, Repeat-single-channel
-    ADCCTL2 |= ADCRES;                                       // 10-bit conversion results
-    ADCMCTL0 |= adc_ch | ADCSREF_0;                       // A5 ADC input select; Vref=1.5V
+    ADCCTL0 = ADCSHT_2 | ADCMSC | ADCON;                             // ADCON, S&H=16 ADC clks
+    ADCCTL1 = ADCSHP | ADCCONSEQ_2;                                  // ADCCLK = MODOSC; sampling timer, Repeat-single-channel
+    ADCCTL2 = ADCRES;                                       // 10-bit conversion results
+    ADCMCTL0 = adc_ch | ADCSREF_0;                       // A5 ADC input select; Vref=1.5V
     //ADCIE |= ADCIE0;                                         // Enable ADC conv complete interrupt
-
-    // Configure reference module located in the PMM
-    PMMCTL0_H = PMMPW_H;                    // Unlock the PMM registers
-    PMMCTL2 |= INTREFEN;                    // Enable internal reference
-    while(!(PMMCTL2 & REFGENRDY));          // Poll till internal reference settles
+    ADCIE = 0x0;
 
     ADCIFG = 0x0;
     ADCMEM0 = 0x0;
 
     ADCCTL0 |= ADCENC | ADCSC;                           // Sampling and conversion start
     //__bis_SR_register(LPM0_bits | GIE);                  // LPM0, ADC_ISR will force exit
+
+    __delay_cycles(10000);             // Delay for n*(1/MCLK(8000000)s
+
     for (i = 0; i < num; i ++) {
-        while (ADCIFG & ADCIV_ADCIFG)
+        while ((ADCIFG & ADCIFG0) == 0)
             ;
         *ADC_Result++ = ADCMEM0;
     }
 
-    ADCCTL0 &= ~ADCENC;
+    ADCCTL0 = 0x0;
     ADCIE = 0x0;                                         // Disable ADC conv complete interrupt
     ADCIFG = 0x0;                                         // Clear ADC Interrupt Flag Register
 
@@ -90,10 +91,12 @@ unsigned int adc_window_comparator_vcc(unsigned int adc_ch, unsigned int High_Th
     ADCHI = High_Threshold;                             // Window Comparator Hi-threshold
     ADCLO = Low_Threshold;                              // Window Comparator Lo-threshold
     //ADCIE |= ADCHIIE | ADCLOIE | ADCINIE;               // Enable ADC conv complete interrupt
-    ADCIE |= ADCINIE;               // Enable ADC conv complete interrupt
+    ADCIE = ADCINIE;               // Enable ADC conv complete interrupt
 
     ADCCTL0 |= ADCENC | ADCSC;                           // Sampling and conversion start
     //__bis_SR_register(LPM0_bits | GIE);                  // LPM0, ADC_ISR will force exit
+
+    __delay_cycles(10000);             // Delay for n*(1/MCLK(8000000)s
 
     return *ADC_Result;
 
@@ -131,11 +134,13 @@ void __attribute__ ((interrupt(ADC_VECTOR))) ADC_ISR (void)
         case ADCIV_ADCINIFG:
             ADCIFG &= ~ADCINIFG;                        // Clear interrupt flag
             *ADC_Result = ADCMEM0;
-            adc_window_isr();
-            P4OUT |= BIT3 | BIT4 |BIT5;
-            P4OUT &= ~BIT5;
-            ADCCTL0 &= ~ADCENC;
-            __bic_SR_register_on_exit(LPM0_bits);            // Clear CPUOFF bit from LPM0
+            if ((*ADC_Result < angle.High_Threshold) && (*ADC_Result > angle.Low_Threshold)) {
+                adc_window_isr();
+                P4OUT |= BIT3 | BIT4 |BIT5;
+                P4OUT &= ~BIT5;
+                ADCCTL0 = 0x0;
+            }
+            //__bic_SR_register_on_exit(LPM0_bits);            // Clear CPUOFF bit from LPM0
             break;
         case ADCIV_ADCIFG:
             if (ADC_Count > 1) {
@@ -144,7 +149,7 @@ void __attribute__ ((interrupt(ADC_VECTOR))) ADC_ISR (void)
                 break;
             } else {
                 *ADC_Result++ = ADCMEM0;
-                ADCCTL0 &= ~ADCENC;
+                ADCCTL0 = 0x0;
                 __bic_SR_register_on_exit(LPM0_bits);            // Clear CPUOFF bit from LPM0
                 break;
             }

@@ -37,10 +37,11 @@ void angle_info_init(void)
     angle.value_30 = 0;
     angle.value_60 = 0;
     angle.value_90 = 0;
-    angle.value_deviation = 0;
+    angle.value_deviation = 3;
+    angle.value_margin = 5;
     angle.one_degree_adc = 0;
-    angle.High_Threshold = 682;
-    angle.Low_Threshold = 341;
+    angle.High_Threshold = 0;
+    angle.Low_Threshold = 0;
 }
 
 void angle_measure(void)
@@ -83,10 +84,10 @@ void Angle_correction(void)
 
     temp = angle.value_close - angle.value_open;
     angle.one_degree_adc = (float)temp / 90;
-    angle.value_0 = angle.value_close - (unsigned int)(angle.one_degree_adc * 3);
+    angle.value_0 = angle.value_close - (unsigned int)(angle.one_degree_adc * angle.value_margin);
     angle.value_30 = angle.value_close - (unsigned int)(angle.one_degree_adc * 30);
-    angle.value_60 = angle.value_close - (unsigned int)(angle.one_degree_adc * 60);
-    angle.value_90 = angle.value_open + (unsigned int)(angle.one_degree_adc * 3);
+    angle.value_60 = angle.value_close - (unsigned int)(angle.one_degree_adc * 50);
+    angle.value_90 = angle.value_open + (unsigned int)(angle.one_degree_adc * angle.value_margin);
 }
 #endif
 
@@ -113,15 +114,19 @@ unsigned int read_angle_value(void)
 
 unsigned int vent_operate(unsigned int angle_value)
 {
+    angle_en();
+
     angle.High_Threshold = angle_value + (unsigned int)(angle.value_deviation * angle.one_degree_adc);
     angle.Low_Threshold = angle_value - (unsigned int)(angle.value_deviation * angle.one_degree_adc);
+
+    angle.value_current = read_angle_value();
 
     if (angle.value_current < angle.Low_Threshold) {
         motor.stop_flag = default_value;
         adc_window_comparator_vcc(ADCINCH_9, angle.High_Threshold, angle.Low_Threshold);
         vent_close();
         delay_hw_ms(800);
-        if (motor.stop_flag != default_value) {
+        if (motor.stop_flag != angle_match_stop) {
             motor_stop_operate();
             motor.stop_flag = time_out_stop;
         }
@@ -132,24 +137,31 @@ unsigned int vent_operate(unsigned int angle_value)
         adc_window_comparator_vcc(ADCINCH_9, angle.High_Threshold, angle.Low_Threshold);
         vent_open();
         delay_hw_ms(800);
-        if (motor.stop_flag != default_value) {
+        if (motor.stop_flag != angle_match_stop) {
             motor_stop_operate();
             motor.stop_flag = time_out_stop;
         }
     }
 
     angle.value_current = read_angle_value();
+
+    angle_off();
+
     return angle.value_current;
 }
 
 void angle_test(void)
 {
-    //delay_hw_s(30);
+    delay_hw_s(5);
     vent_operate(angle.value_30);
-    //delay_hw_s(30);
+    delay_hw_s(5);
     vent_operate(angle.value_60);
-    //delay_hw_s(30);
+    delay_hw_s(5);
     vent_operate(angle.value_90);
-    //delay_hw_s(30);
+    delay_hw_s(5);
+    vent_operate(angle.value_60);
+    delay_hw_s(5);
+    vent_operate(angle.value_30);
+    delay_hw_s(5);
     vent_operate(angle.value_0);
 }

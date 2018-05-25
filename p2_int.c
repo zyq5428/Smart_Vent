@@ -47,7 +47,7 @@ void close_int_off(void)
 
 void limit_int_en(void)
 {
-    P2IFG &= ~(BIT4 | BIT5);    //clear P2IFGs
+    P2IFG = 0x0;    //clear P2IFGs
     P2IE |= BIT4 | BIT5;
 }
 
@@ -83,7 +83,7 @@ void __attribute__ ((interrupt(PORT1_VECTOR))) Port_2 (void)
     case BIT4:      /* P2.4 is LIMIT1 (Vent open), Falling edge*/
         P2IFG &= ~BIT4;
         //__delay_cycles(10000);             // Delay for n*(1/MCLK(8000000)=0.1s
-        if (!(P2IN & BIT4)) {
+        //if (!(P2IN & BIT4)) {
             if (motor.motor_flag == open_flag) {
                 motor_stop_operate();
                 motor.stop_flag = open_limit_stop;
@@ -94,13 +94,13 @@ void __attribute__ ((interrupt(PORT1_VECTOR))) Port_2 (void)
                 led_off();
                 green_on();
             }
-        }
+        //}
         break;
 
     case BIT5:      /* P2.5 is LIMIT2(Vent close), Falling edge*/
         P2IFG &= ~BIT5;
         //__delay_cycles(10000);             // Delay for n*(1/MCLK(8000000)=0.1s
-        if (!(P2IN & BIT5)) {
+        //if (!(P2IN & BIT5)) {
             if (motor.motor_flag == close_flag) {
                 motor_stop_operate();
                 motor.stop_flag = close_limit_stop;
@@ -111,7 +111,7 @@ void __attribute__ ((interrupt(PORT1_VECTOR))) Port_2 (void)
                 led_off();
                 blue_on();
             }
-        }
+        //}
         break;
 
     case BIT6:

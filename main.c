@@ -25,6 +25,8 @@ int main(void)
 
     bat_info_init();
 
+    angle_info_init();
+
     vent_self_test();
 
     rtc_wake_isr();

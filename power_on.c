@@ -31,13 +31,15 @@ void vent_self_test(void)
 {
     __bis_SR_register(GIE);     // General interrupt enable
 
+    delay_hw_s(10);
+
     vent_info_init();
 
     angle_en();
 
     timer_start();
 
-    motor_init(motor_stop, 10000, 80);
+    motor_init(motor_stop, 10000, 75);
     pwm_init();
 
     if (!((P2IN & BIT4) == 0)) {

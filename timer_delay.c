@@ -32,7 +32,7 @@ void delay_hw_ms(unsigned int delay_ms)
     for (n = delay_ms; n > 0; n--) {
         TA1CCR0 = 0x21;                             // Time is 1ms
         TA1CTL = TASSEL__ACLK | MC__UP | TACLR | TAIE;  // ACLK, upmode, clear TAR, enable interrupt
-          __bis_SR_register(LPM3_bits | GIE);       // Enter LPM3, enable interrupts
+          __bis_SR_register(LPM0_bits | GIE);       // Enter LPM3, enable interrupts
     }
 }
 
@@ -42,7 +42,7 @@ void delay_hw_s(unsigned int delay_s)
     for (n = delay_s; n > 0; n--) {
         TA1CCR0 = 0x7FFF;                               // Time is 1s
         TA1CTL = TASSEL__ACLK | MC__UP | TACLR | TAIE;  // ACLK, upmode, clear TAR, enable interrupt
-          __bis_SR_register(LPM3_bits | GIE);       // Enter LPM3, enable interrupts
+          __bis_SR_register(LPM0_bits | GIE);       // Enter LPM3, enable interrupts
     }
 }
 
@@ -67,7 +67,7 @@ void __attribute__ ((interrupt(TIMER0_A1_VECTOR))) TIMER0_A1_ISR (void)
     case TA1IV_6:      break;               // reserved
     case TA1IV_TAIFG:                       // overflow
       TA1CTL = TASSEL__ACLK | MC_0 | TACLR | TAIE;
-      __bic_SR_register_on_exit(LPM3_bits);
+      __bic_SR_register_on_exit(LPM0_bits);
       break;
     default: break;
   }
