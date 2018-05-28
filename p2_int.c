@@ -10,10 +10,12 @@
 #include "motor.h"
 #include "power_on.h"
 #include "angle.h"
+#include "main.h"
 
 extern struct angle_info angle;
 extern struct vent_info vent;
 extern struct motor_info motor;
+extern unsigned int Global_Flag;
 
 void p2_int_init(void)
 {
@@ -57,6 +59,35 @@ void limit_int_off(void)
     P2IE &= ~(BIT4 | BIT5);
 }
 
+void open_int_isr(void)
+{
+    motor_stop_operate();
+    motor.stop_flag = open_limit_stop;
+    if (vent.limit_open_flag == ERROR) {
+        angle.value_open = read_angle_value();
+        vent.limit_open_flag = OK;
+    }
+    led_off();
+    green_on();
+}
+
+void close_int_isr(void)
+{
+    motor_stop_operate();
+    motor.stop_flag = close_limit_stop;
+    if (vent.limit_close_flag == ERROR) {
+        angle.value_close = read_angle_value();
+        vent.limit_close_flag = OK;
+    }
+    led_off();
+    blue_on();
+}
+
+void cc1310_int_isr(void)
+{
+    ;
+}
+
 // Port 2 interrupt service routine
 #if defined(__TI_COMPILER_VERSION__) || defined(__IAR_SYSTEMS_ICC__)
 #pragma vector=PORT2_VECTOR
@@ -73,6 +104,7 @@ void __attribute__ ((interrupt(PORT1_VECTOR))) Port_2 (void)
         break;
     case BIT1:
         P2IFG &= ~BIT1;
+        Global_Flag |= CC1310_INT_Flag;    //set flag
         break;
     case BIT2:
         P2IFG &= ~BIT2;
@@ -83,35 +115,21 @@ void __attribute__ ((interrupt(PORT1_VECTOR))) Port_2 (void)
     case BIT4:      /* P2.4 is LIMIT1 (Vent open), Falling edge*/
         P2IFG &= ~BIT4;
         //__delay_cycles(10000);             // Delay for n*(1/MCLK(8000000)=0.1s
-        //if (!(P2IN & BIT4)) {
+        if (!(P2IN & BIT4)) {
             if (motor.motor_flag == open_flag) {
-                motor_stop_operate();
-                motor.stop_flag = open_limit_stop;
-                if (vent.limit_open_flag == ERROR) {
-                    angle.value_open = read_angle_value();
-                    vent.limit_open_flag = OK;
-                }
-                led_off();
-                green_on();
+                Global_Flag |= OPEN_INT_Flag;    //set flag
             }
-        //}
+        }
         break;
 
     case BIT5:      /* P2.5 is LIMIT2(Vent close), Falling edge*/
         P2IFG &= ~BIT5;
         //__delay_cycles(10000);             // Delay for n*(1/MCLK(8000000)=0.1s
-        //if (!(P2IN & BIT5)) {
+        if (!(P2IN & BIT5)) {
             if (motor.motor_flag == close_flag) {
-                motor_stop_operate();
-                motor.stop_flag = close_limit_stop;
-                if (vent.limit_close_flag == ERROR) {
-                    angle.value_close = read_angle_value();
-                    vent.limit_close_flag = OK;
-                }
-                led_off();
-                blue_on();
+                Global_Flag |= CLOSE_INT_Flag;    //set flag
             }
-        //}
+        }
         break;
 
     case BIT6:

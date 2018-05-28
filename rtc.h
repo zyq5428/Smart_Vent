@@ -8,8 +8,10 @@
 #ifndef RTC_H_
 #define RTC_H_
 
+#include <msp430.h>
+
 void rtc_init(int second);
 
-void rtc_wake_isr(void);
+void rtc_int_isr(void);
 
 #endif /* RTC_H_ */

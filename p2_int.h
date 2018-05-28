@@ -24,4 +24,10 @@ void limit_int_en(void);
 
 void limit_int_off(void);
 
+void open_int_isr(void);
+
+void close_int_isr(void);
+
+void cc1310_int_isr(void);
+
 #endif /* P2_INT_H_ */

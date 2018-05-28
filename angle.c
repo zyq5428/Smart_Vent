@@ -152,16 +152,16 @@ unsigned int vent_operate(unsigned int angle_value)
 
 void angle_test(void)
 {
-    delay_hw_s(5);
+    delay_hw_s(10);
     vent_operate(angle.value_30);
-    delay_hw_s(5);
+    delay_hw_s(10);
     vent_operate(angle.value_60);
-    delay_hw_s(5);
+    delay_hw_s(10);
     vent_operate(angle.value_90);
-    delay_hw_s(5);
+    delay_hw_s(10);
     vent_operate(angle.value_60);
-    delay_hw_s(5);
+    delay_hw_s(10);
     vent_operate(angle.value_30);
-    delay_hw_s(5);
+    delay_hw_s(10);
     vent_operate(angle.value_0);
 }

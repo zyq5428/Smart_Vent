@@ -10,8 +10,12 @@
 #include "motor.h"
 #include "led.h"
 #include "angle.h"
+#include "rtc.h"
+#include "main.h"
+#include "p2_int.h"
 
 struct vent_info vent;
+extern unsigned int Global_Flag;
 
 void vent_info_init(void)
 {
@@ -31,7 +35,7 @@ void vent_self_test(void)
 {
     __bis_SR_register(GIE);     // General interrupt enable
 
-    delay_hw_s(10);
+    delay_hw_s(1);
 
     vent_info_init();
 
@@ -39,26 +43,30 @@ void vent_self_test(void)
 
     timer_start();
 
-    motor_init(motor_stop, 10000, 75);
+    motor_init(motor_stop, 10000, 90);
     pwm_init();
 
     if (!((P2IN & BIT4) == 0)) {
         vent_open();
-        while (vent.limit_open_flag == ERROR) {
+        while ((Global_Flag & OPEN_INT_Flag) == 0) {
             limit_error();
         }
+        open_int_isr();
+        Global_Flag &= ~(OPEN_INT_Flag);    //Clear flag when finished
     }
 
     vent_close();
-    while (vent.limit_close_flag == ERROR) {
+    while ((Global_Flag & CLOSE_INT_Flag) == 0)
         limit_error();
-    }
+    close_int_isr();
+    Global_Flag &= ~(CLOSE_INT_Flag);    //Clear flag when finished
 
     if (vent.limit_open_flag == ERROR) {
         vent_open();
-        while (vent.limit_open_flag == ERROR) {
+        while ((Global_Flag & OPEN_INT_Flag) == 0)
             limit_error();
-        }
+        open_int_isr();
+        Global_Flag &= ~(OPEN_INT_Flag);    //Clear flag when finished
     }
 
     vent.init_flag = OK;
@@ -68,4 +76,6 @@ void vent_self_test(void)
     Angle_correction();
 
     angle_off();
+
+    rtc_init(60);
 }

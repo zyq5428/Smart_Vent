@@ -25,7 +25,7 @@ void motor_init(unsigned char flag, unsigned int freq, unsigned int duty)
 void pwm_init(void)
 {
     pwm.period_value = 8000000 / motor.motor_freq;  //value = 8MHz / f
-    pwm.high_value = pwm.period_value * motor.motor_duty / 100;
+    pwm.high_value = (unsigned int)(pwm.period_value * (motor.motor_duty / 100.0));
 }
 
 void motor_stop_operate(void)

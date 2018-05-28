@@ -5,11 +5,14 @@
  *      Author: johnsonzhou
  */
 
-#include <msp430.h>
+#include "rtc.h"
 #include "led.h"
 #include "i2c_hw.h"
 #include "hp203b.h"
 #include "bat_detect.h"
+#include "main.h"
+
+extern unsigned int Global_Flag;
 
 int wake_num = 0;
 
@@ -24,7 +27,7 @@ void rtc_init(int second)
     RTCCTL = RTCSS__XT1CLK | RTCSR | RTCPS__1024 | RTCIE;
 }
 
-void rtc_wake_isr(void)
+void rtc_int_isr(void)
 {
     switch(wake_num) {
     case 0:
@@ -61,7 +64,7 @@ void __attribute__ ((interrupt(RTC_VECTOR))) RTC_ISR (void)
     {
         case  RTCIV_NONE:   break;          // No interrupt
         case  RTCIV_RTCIF:                  // RTC Overflow
-            rtc_wake_isr();
+            Global_Flag |= RTC_INT_Flag;    //set flag
             break;
         default: break;
     }
