@@ -65,6 +65,7 @@ void __attribute__ ((interrupt(RTC_VECTOR))) RTC_ISR (void)
         case  RTCIV_NONE:   break;          // No interrupt
         case  RTCIV_RTCIF:                  // RTC Overflow
             Global_Flag |= RTC_INT_Flag;    //set flag
+            __bic_SR_register_on_exit(LPM3_bits);            // Clear CPUOFF bit from LPM0
             break;
         default: break;
     }
