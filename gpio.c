@@ -13,54 +13,53 @@ void initGpio(void)
     P1SEL0 |= BIT0 | BIT1;                  // set P1.0,P1.1 pin as second function(UCA0UART)
         /* P1.2 P1.3 is Reserved connect CC1310 */
     P1DIR |= BIT2 | BIT3;                   // set P1.2,P1.3 pin output low
-    P1REN |= BIT2 | BIT3;
     P1OUT &= ~(BIT2 | BIT3);
         /* P1.4 is unused */
     P1DIR |= BIT4;                   // set P1.4 pin output low
-    P1REN |= BIT4;
     P1OUT &= ~(BIT4);
         /* P1.5 is Detect battery power as ADC */
     P1DIR &= ~BIT5;                   // set P1.5 pin input as A5
+    SYSCFG2 |= ADCPCTL5;
         /* P1.6 is TA0.2,P1.7 is TA0.1, control motor*/
     P1DIR |= BIT6 | BIT7;                   // set P1.6,P1.7 pin output PWM
-    P1SEL0 |= BIT6 | BIT7;
+    P1OUT &= ~(BIT6 | BIT7);
 
     /* P2 configuration */
         /* P2.0 is connect HP203B INT0 interrupt, */
-    P2DIR &= ~BIT0;                   // set P2.0 pin input with pullup resistor
+    P2DIR &= ~BIT0;                   // set P2.0 pin input with pulldown resistor
     P2REN |= BIT0;
-    P2OUT |= BIT0;
-    P2IES |= BIT0;
+    P2OUT &= ~BIT0;
+    //P2IES |= BIT0;
         /* P2.1 is connect CC1310 interrupt, Rising edge*/
     P2DIR &= ~BIT1;                   // set P2.1 pin input with pulldown resistor
     P2REN |= BIT1;
     P2OUT &= ~BIT1;
-    P2IES &= ~BIT1;
+    //P2IES &= ~BIT1;
         /* P2.2 is BQ21040 CHG interrupt, Low (FET on) indicates that charging and Open Drain (FET off) indicate no Charging or Charge Complete*/
     P2DIR &= ~BIT2;                   // set P2.2 pin input with pullup resistor
     P2REN |= BIT2;
     P2OUT |= BIT2;
-    P2IES |= BIT2;
+    //P2IES |= BIT2;
         /* P2.3 is BQ21040 DC_OK interrupt, Low indicates no DC insert and Height indicate DC insert*/
     P2DIR &= ~BIT3;                   // set P2.2 pin input with pulldown resistor
     P2REN |= BIT3;
     P2OUT &= ~BIT3;
-    P2IES &= ~BIT3;
+    //P2IES &= ~BIT3;
         /* P2.4 is LIMIT1 (Vent open),P2.5 is LIMIT2(Vent close), Falling edge*/
     P2DIR &= ~(BIT4 | BIT5);                   // set P1.5 pin input with pullup resistor
     P2REN |= (BIT4 | BIT5);
     P2OUT |= (BIT4 | BIT5);
     P2IES |= (BIT4 | BIT5);
         /* P2.6 is Pairing button interrupt, Falling edge*/
-    P2DIR &= ~BIT6;                   // set P2.2 pin input with pulldown resistor
+    P2DIR &= ~BIT6;                   // set P2.2 pin input with pullup resistor
     P2REN |= BIT6;
-    P2OUT &= ~BIT6;
-    P2IES &= ~BIT6;
+    P2OUT |= BIT6;
+    //P2IES |= BIT6;
         /* P2.7 is connect HP203B INT1 interrupt, */
-    P2DIR &= ~BIT7;                   // set P2.0 pin input with pullup resistor
+    P2DIR &= ~BIT7;                   // set P2.0 pin input with pulldown resistor
     P2REN |= BIT7;
-    P2OUT |= BIT7;
-    P2IES |= BIT7;
+    P2OUT &= ~BIT7;
+    //P2IES &= ~BIT7;
 
     /* P3 configuration */
         /* P3 all pin is output */
@@ -110,7 +109,8 @@ void initGpio(void)
 
     /* P8 configuration */
         /* P8.1 is Detect battery power as ADC */
-    P8DIR &= ~BIT1;                   // set P8.1 pin input as A8
+    P8DIR &= ~BIT1;                   // set P8.1 pin input as A9
+    SYSCFG2 |= ADCPCTL9;
         /* P8.0,2,3 is is unused,because have External pull-up resistor, output height */
     P8DIR |= (BIT0 | BIT2 | BIT3);
     P8OUT |= (BIT0 | BIT2 | BIT3);

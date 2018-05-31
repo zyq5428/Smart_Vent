@@ -77,5 +77,5 @@ void vent_self_test(void)
 
     angle_off();
 
-    rtc_init(5);
+    rtc_init(15);
 }

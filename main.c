@@ -24,6 +24,8 @@ int main(void)
 
     cs_init();
 
+    __bis_SR_register(LPM3_bits | GIE);     // Enter LPM3, enable interrupt
+
     //uart_init();
 
     limit_int_en();
