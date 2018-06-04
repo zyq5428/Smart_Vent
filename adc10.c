@@ -16,6 +16,14 @@ unsigned char ADC_Count;
 extern struct motor_info motor;
 extern struct angle_info angle;
 
+void close_reference(void)
+{
+    // Configure reference module located in the PMM
+    PMMCTL0_H = PMMPW_H;                    // Unlock the PMM registers
+    PMMCTL2 &= ~INTREFEN;                    // Enable internal reference
+
+}
+
 void adc_window_isr(void)
 {
     motor_stop_operate();
@@ -41,7 +49,11 @@ unsigned char adc_repeat_single_channel_1v5(unsigned int adc_ch, unsigned char n
     while(!(PMMCTL2 & REFGENRDY));          // Poll till internal reference settles
 
     ADCCTL0 |= ADCENC | ADCSC;                           // Sampling and conversion start
-    __bis_SR_register(LPM0_bits);                  // LPM0, ADC_ISR will force exit
+    __bis_SR_register(LPM0_bits | GIE);                  // LPM0, ADC_ISR will force exit
+
+    // Configure reference module located in the PMM
+    PMMCTL0_H = PMMPW_H;                    // Unlock the PMM registers
+    PMMCTL2 &= ~INTREFEN;                    // Enable internal reference
 
     return ADC_Count;
 }
@@ -136,19 +148,18 @@ void __attribute__ ((interrupt(ADC_VECTOR))) ADC_ISR (void)
             *ADC_Result = ADCMEM0;
             if ((*ADC_Result < angle.High_Threshold) && (*ADC_Result > angle.Low_Threshold)) {
                 adc_window_isr();
-                P4OUT |= BIT3 | BIT4 |BIT5;
-                P4OUT &= ~BIT5;
                 ADCCTL0 = 0x0;
             }
             //__bic_SR_register_on_exit(LPM0_bits);            // Clear CPUOFF bit from LPM0
             break;
         case ADCIV_ADCIFG:
-            if (ADC_Count > 1) {
+            if (ADC_Count > 2) {
                 *ADC_Result++ = ADCMEM0;
                 ADC_Count--;
                 break;
             } else {
                 *ADC_Result++ = ADCMEM0;
+                ADC_Count--;
                 ADCCTL0 = 0x0;
                 __bic_SR_register_on_exit(LPM0_bits);            // Clear CPUOFF bit from LPM0
                 break;

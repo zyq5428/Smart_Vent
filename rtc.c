@@ -11,6 +11,7 @@
 #include "hp203b.h"
 #include "bat_detect.h"
 #include "main.h"
+#include "angle.h"
 
 extern unsigned int Global_Flag;
 
@@ -31,19 +32,21 @@ void rtc_int_isr(void)
 {
     switch(wake_num) {
     case 0:
-        led_off();
-        green_on();
+
+        //green_on();
         bat_detect();
-        i2c_init();
         hp203b_init();
+        angle_test();
         wake_num++;
+        led_off();
         break;
     case 1:
-        led_off();
+
         wake_num = 0;
         bat_detect();
-        i2c_init();
         hp203b_init();
+        angle_test();
+        led_off();
         break;
     default:
         break;

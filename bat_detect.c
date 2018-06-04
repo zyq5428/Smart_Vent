@@ -11,7 +11,7 @@
 
 struct bat_info bat;
 
-unsigned int Bat_Elec[30];
+unsigned int Bat_Elec[10];
 
 void bat_info_init(void)
 {
@@ -31,17 +31,19 @@ unsigned char bat_detect(void)
 {
     unsigned char i;
 
+    bat.Bat_Elec_ADC = 0;
+
     //bat_info_init();
 
     // Configure ADC A5 pin
-    SYSCFG2 |= ADCPCTL5;
+    //SYSCFG2 |= ADCPCTL5;
 
     adc_repeat_single_channel_1v5(ADCINCH_5, bat.detect_avg_num, Bat_Elec);
 
-    for (i = 0; i < bat.detect_avg_num; i++) {
+    for (i = 1; i < (bat.detect_avg_num - 1); i++) {
         bat.Bat_Elec_ADC = bat.Bat_Elec_ADC + Bat_Elec[i];
     }
-    bat.Bat_Elec_ADC = bat.Bat_Elec_ADC / bat.detect_avg_num;
+    bat.Bat_Elec_ADC = bat.Bat_Elec_ADC / (bat.detect_avg_num - 2);
 
     if (bat.Bat_Elec_ADC < bat.Alarm_Elec_ADC) {              //3.5V / 3 = 1.17V = 0x31e
         bat.Alarm_flag = 1;

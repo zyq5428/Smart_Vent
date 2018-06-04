@@ -55,6 +55,14 @@ void i2c_init(void)
 	  UCB0IE |= UCTXIE0 | UCRXIE0 | UCNACKIE;             // transmit and NACK interrupt enable
 }
 
+void i2c_reset(void)
+{
+      // Configure USCI_B0 for I2C mode
+      UCB0CTLW0 = UCSWRST;                      // put eUSCI_B in reset state
+      __delay_cycles(10);
+      UCB0CTLW0 &= ~UCSWRST;                    // clear reset register
+}
+
 #if defined(__TI_COMPILER_VERSION__) || defined(__IAR_SYSTEMS_ICC__)
 #pragma vector = USCI_B0_VECTOR
 __interrupt void USCI_B0_ISR(void)

@@ -47,8 +47,8 @@ void initGpio(void)
     //P2IES &= ~BIT3;
         /* P2.4 is LIMIT1 (Vent open),P2.5 is LIMIT2(Vent close), Falling edge*/
     P2DIR &= ~(BIT4 | BIT5);                   // set P1.5 pin input with pullup resistor
-    P2REN |= (BIT4 | BIT5);
-    P2OUT |= (BIT4 | BIT5);
+    //P2REN |= (BIT4 | BIT5);                   // if need Low power consumption,Use external weak pull-ups
+    //P2OUT |= (BIT4 | BIT5);
     P2IES |= (BIT4 | BIT5);
         /* P2.6 is Pairing button interrupt, Falling edge*/
     P2DIR &= ~BIT6;                   // set P2.2 pin input with pullup resistor

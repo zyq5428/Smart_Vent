@@ -122,7 +122,15 @@ void get_temp(void)
 
 void hp203b_init(void)
 {
+    i2c_init();
+
+    delay_hw_ms(10);
     get_press_temp();
+    //hp203b_rst();
+    delay_hw_ms(10);
+
     hp203b_off();
+
+    i2c_reset();
 }
 

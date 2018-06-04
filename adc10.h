@@ -10,6 +10,8 @@
 
 #include <msp430.h>
 
+void close_reference(void);
+
 unsigned char adc_repeat_single_channel_1v5(unsigned int adc_ch, unsigned char num, unsigned int *Result);
 
 unsigned char adc_repeat_single_channel_vcc(unsigned int adc_ch, unsigned char num, unsigned int *Result);

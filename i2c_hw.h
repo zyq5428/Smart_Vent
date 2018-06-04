@@ -11,6 +11,7 @@
 #include <msp430.h>
 
 void i2c_init(void);
+void i2c_reset(void);
 void i2c_Write(unsigned char addr, unsigned char *pstr, int num);
 void i2c_read(unsigned char addr, unsigned char *pstr, int num);
 

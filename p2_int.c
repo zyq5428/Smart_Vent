@@ -67,8 +67,8 @@ void open_int_isr(void)
         angle.value_open = read_angle_value();
         vent.limit_open_flag = OK;
     }
-    led_off();
-    green_on();
+    //led_off();
+    //green_on();
 }
 
 void close_int_isr(void)
@@ -79,8 +79,8 @@ void close_int_isr(void)
         angle.value_close = read_angle_value();
         vent.limit_close_flag = OK;
     }
-    led_off();
-    blue_on();
+    //led_off();
+    //blue_on();
 }
 
 void cc1310_int_isr(void)

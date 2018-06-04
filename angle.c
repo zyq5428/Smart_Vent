@@ -49,7 +49,7 @@ void angle_measure(void)
     angle_info_init();
 
     // Configure ADC A9 pin
-    SYSCFG2 |= ADCPCTL9;
+    //SYSCFG2 |= ADCPCTL9;
 
     angle.value_current = adc_window_comparator_vcc(ADCINCH_9, angle.High_Threshold, angle.Low_Threshold);
 }
@@ -100,7 +100,7 @@ unsigned int read_angle_value(void)
     //num = angle_num;
 
     // Configure ADC A9 pin
-    SYSCFG2 |= ADCPCTL9;
+    //SYSCFG2 |= ADCPCTL9;
 
     adc_repeat_single_channel_vcc(ADCINCH_9, 10, angle_value);
 
@@ -152,16 +152,16 @@ unsigned int vent_operate(unsigned int angle_value)
 
 void angle_test(void)
 {
-    delay_hw_s(10);
+    delay_hw_s(2);
     vent_operate(angle.value_30);
-    delay_hw_s(10);
+    delay_hw_s(2);
     vent_operate(angle.value_60);
-    delay_hw_s(10);
+    delay_hw_s(2);
     vent_operate(angle.value_90);
-    delay_hw_s(10);
+    delay_hw_s(2);
     vent_operate(angle.value_60);
-    delay_hw_s(10);
+    delay_hw_s(2);
     vent_operate(angle.value_30);
-    delay_hw_s(10);
+    delay_hw_s(2);
     vent_operate(angle.value_0);
 }

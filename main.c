@@ -11,6 +11,9 @@
 #include "p2_int.h"
 #include "motor.h"
 #include "power_on.h"
+#include "adc10.h"
+#include "i2c_hw.h"
+#include "hp203b.h"
 
 unsigned int Global_Flag;
 unsigned int Current_Status;
@@ -24,8 +27,6 @@ int main(void)
 
     cs_init();
 
-    __bis_SR_register(LPM3_bits | GIE);     // Enter LPM3, enable interrupt
-
     //uart_init();
 
     limit_int_en();
@@ -35,6 +36,7 @@ int main(void)
     angle_info_init();
 
     Global_Flag = 0x8000;
+    //Global_Flag = 0x0;
 
     while (1) {
         unsigned char right_shift_counter;
@@ -45,6 +47,9 @@ int main(void)
             Global_Flag &= ~(SELF_TEST_Flag);    //Clear flag when finished
             break;
         case  0:
+            //initGpio();
+            //limit_int_off();
+            //close_reference();
             __bis_SR_register(LPM3_bits | GIE);     // Enter LPM3, enable interrupt
             break;
         case  OPEN_INT_Flag:        //BIT0
